@@ -25,8 +25,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             GameActivity.class.getCanonicalName().concat("BUNDLE_EXTRA_SCORE");
     
     public static final String BUNDLE_STATE_SCORE = "currentScore";
-    public static final String BUNDLE_STATE_CURRENT_QUESTION = "currentQuestion";
+    public static final String BUNDLE_STATE_CURRENT_QUESTION_NUMBER = "currentQuestionNumber";
     public static final String BUNDLE_STATE_QUESTION_BANK = "currentQuestionBank";
+    private static final String BUNDLE_STATE_CURRENT_QUESTION = "currentQuestion";
     
     private TextView mQuestionText;
     private Button mAnswer1Button;
@@ -53,14 +54,16 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         
         if (savedInstanceState != null) {
             mScore = savedInstanceState.getInt(BUNDLE_STATE_SCORE);
-            mNumberOfQuestions = savedInstanceState.getInt(BUNDLE_STATE_CURRENT_QUESTION);
+            mNumberOfQuestions = savedInstanceState.getInt(BUNDLE_STATE_CURRENT_QUESTION_NUMBER);
             mQuestionBank = savedInstanceState.getParcelable(BUNDLE_STATE_QUESTION_BANK);
+            mCurrentQuestion = savedInstanceState.getParcelable(BUNDLE_STATE_CURRENT_QUESTION);
+            displayQuestion(mCurrentQuestion);
         } else {
             mScore = 0;
             mNumberOfQuestions = 4;
             mQuestionBank = generateQuestions();
+            drawQuestion();
         }
-        drawQuestion();
         
         mEnableTouchEvents = true;
     }
@@ -86,7 +89,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
     
     private void drawQuestion() {
-        mCurrentQuestion = mQuestionBank.getQuestion();
+        mCurrentQuestion = mQuestionBank.drawQuestion();
         displayQuestion(mCurrentQuestion);
     }
     
@@ -255,8 +258,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         outState.putInt(BUNDLE_STATE_SCORE, mScore);
-        outState.putInt(BUNDLE_STATE_CURRENT_QUESTION, mNumberOfQuestions);
+        outState.putInt(BUNDLE_STATE_CURRENT_QUESTION_NUMBER, mNumberOfQuestions);
         outState.putParcelable(BUNDLE_STATE_QUESTION_BANK, mQuestionBank);
+        outState.putParcelable(BUNDLE_STATE_CURRENT_QUESTION, mCurrentQuestion);
         super.onSaveInstanceState(outState);
     }
 }

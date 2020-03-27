@@ -31,7 +31,7 @@ public class QuestionBank implements Parcelable {
         mQuestionsList = questionsList;
     }
 
-    public Question getQuestion() {
+    public Question drawQuestion() {
         if (mNextQuestionIndex == mQuestionsList.size()) {
             mNextQuestionIndex = 0;
         }
